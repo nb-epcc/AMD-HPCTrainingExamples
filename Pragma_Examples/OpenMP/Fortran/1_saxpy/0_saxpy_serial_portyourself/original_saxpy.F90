@@ -1,3 +1,4 @@
+
 module saxpymod
    use iso_fortran_env
    use omp_lib
@@ -18,28 +19,10 @@ subroutine saxpy(a, x, y, n)
    real(kind=real32), dimension(:),allocatable,intent(inout) :: y
    real(kind=real64) :: start, finish
 
-   !NBEDIT
-   !logical :: is_initial_device
-   integer :: num_devices
-   !is_initial_device = omp_is_initial_device()
-   !NBEDIT
-
-   num_devices = omp_get_num_devices()
    start = OMP_GET_WTIME()
-   !$omp target data map(to:x,n), map(tofrom:y)
-   !map(from:num_devices)
-   !$omp target teams distribute parallel do
-
    do i=1,n
        y(i) = a * x(i) + y(i)
    end do
-   !$omp end target teams distribute parallel do
-   !$omp end target data
-
-   write (*, *) 'IS INITIAL DEVICE? : ', omp_is_initial_device()
-   write (*, *) 'NUMBER OF DEVICES : ', num_devices
-   write (*, *) 'DEVICE ID : ', device_id
-
    finish = OMP_GET_WTIME()
    write (*, '("Time of kernel: ",f8.6)') finish-start
 
@@ -81,6 +64,8 @@ program main
    call initialize(x,y,n)
    a = 2.0_real32
 
+
    call saxpy(a, x, y, n)
+
 
 end program main
