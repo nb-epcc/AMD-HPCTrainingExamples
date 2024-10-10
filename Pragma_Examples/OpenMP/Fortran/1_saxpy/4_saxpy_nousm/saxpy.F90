@@ -57,7 +57,7 @@ program main
    use iso_fortran_env
    use saxpymod, ONLY:saxpy,initialize
    implicit none
-   integer,parameter :: n = 10000000
+   integer,parameter :: n = 50000000
    real(kind=real32), allocatable, dimension(:) :: x
    real(kind=real32), allocatable, dimension(:) :: y
    integer :: i

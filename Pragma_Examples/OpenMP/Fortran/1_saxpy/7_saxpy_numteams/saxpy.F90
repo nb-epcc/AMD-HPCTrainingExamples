@@ -21,6 +21,7 @@ subroutine saxpy(a, x, y, n)
 
    start = OMP_GET_WTIME()
    !$omp target teams distribute parallel do num_teams(228)
+   !num_teams(228)
    do i=1,n
        y(i) = a * x(i) + y(i)
    end do
@@ -43,7 +44,8 @@ subroutine initialize(x,y,n)
    real(kind=real32), dimension(:),allocatable,intent(inout) :: x
    real(kind=real32), dimension(:),allocatable,intent(inout) :: y
 
-   !$omp target teams distribute parallel do num_teams(228)
+   !$omp target teams distribute parallel do num_teams(1)
+   !num_teams(228)
    do i=1,n
      x(i) = 1.0_real32
      y(i) = 2.0_real32
@@ -69,7 +71,7 @@ program main
    !$omp target enter data map(to:x,y)
    call initialize(x,y,n)
    a=2.0_real32
-   call saxpy(a, x, y, n)
+   !call saxpy(a, x, y, n)
    !$omp target exit data map(release:x,y)
    deallocate(x,y)
 end program main

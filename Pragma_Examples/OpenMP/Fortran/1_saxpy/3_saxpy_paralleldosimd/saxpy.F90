@@ -43,13 +43,17 @@ subroutine initialize(x,y,n)
    real(kind=real32) :: a
    real(kind=real32), dimension(:),allocatable,intent(inout) :: x
    real(kind=real32), dimension(:),allocatable,intent(inout) :: y
+   real(kind=real64) :: start, finish
 
+   start = OMP_GET_WTIME()
    !$omp target teams distribute parallel do
    do i=1,n
      x(i) = 1.0_real32
      y(i) = 2.0_real32
    end do
    !$omp end target teams distribute parallel do
+   finish = OMP_GET_WTIME()
+   write (*, '("Time of initialisation: ",f8.6)') finish-start
    end subroutine initialize
 
 end module saxpymod
@@ -70,5 +74,5 @@ program main
 
    call initialize(x,y,n)
    a=2.0_real32
-   call saxpy(a, x, y, n)
+   !call saxpy(a, x, y, n)
 end program main
